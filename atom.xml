@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>紫衫书生的学习博客</title>
+  
+  
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://yoursite.com/"/>
+  <updated>2020-03-13T07:19:48.372Z</updated>
+  <id>http://yoursite.com/</id>
+  
+  <author>
+    <name>紫衫书生</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>学习linux（三）</title>
+    <link href="http://yoursite.com/2020/03/13/linux-3/"/>
+    <id>http://yoursite.com/2020/03/13/linux-3/</id>
+    <published>2020-03-13T07:13:22.000Z</published>
+    <updated>2020-03-13T07:19:48.372Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="用户与用户组"><a href="#用户与用户组" class="headerlink" title="用户与用户组"></a>用户与用户组</h2><p>linux是一个多用户和多任务的系统，支持多人同时使用一台系统。因此为了考虑个人隐私及个人喜好的工作环境，“文件所有者”的角色就相当重要了。<br>用户，用户就是文件所有者，也是登录linux的所使用的账号。而用户组主要就是将不同的用户进行分组，分组的作用就是让自己的文件可以被组内其他人访问，但是不允许组外的人访问。用户组之外的人为其他用户。用户与用户组是多对多的关系，也就是一个人可以有多个组，一组也可以有多个人。</p><p>用户里面有一个bug账户的存在：root，它是一个无所不能的账号，可以做任何想做的事情。举个例子:用户就相当于租客，用户组就相当于房子，而root就相当于包租婆。</p><h2 id="linux文件权限的概念"><a href="#linux文件权限的概念" class="headerlink" title="linux文件权限的概念"></a>linux文件权限的概念</h2><h3 id="linux文件属性"><a href="#linux文件属性" class="headerlink" title="linux文件属性"></a>linux文件属性</h3><p>在linux界面中，执行“ls -al”命令会看到一下内容</p><div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[cyp@VM_0_16_centos ~]$ ls -al</span><br><span class="line">total 48</span><br><span class="line">drwx------  4 cyp  cyp  4096 Mar 10 15:19 .</span><br><span class="line">drwxr-xr-x. 3 root root 4096 Jan  9 22:06 ..</span><br><span class="line">-rw-------  1 cyp  cyp  5544 Mar 13 11:31 .bash_history</span><br><span class="line">-rw-r--r--  1 cyp  cyp    18 Apr 11  2018 .bash_logout</span><br><span class="line">-rw-r--r--  1 cyp  cyp   193 Apr 11  2018 .bash_profile</span><br><span class="line">-rw-r--r--  1 cyp  cyp   231 Apr 11  2018 .bashrc</span><br><span class="line">drwxrwxr-x  3 cyp  cyp  4096 Jan  9 22:09 .cache</span><br><span class="line">drwxrwxr-x  3 cyp  cyp  4096 Jan  9 22:09 .config</span><br><span class="line">-rw-------  1 cyp  cyp     7 Mar 10 14:00 .python_history</span><br><span class="line">-rw-------  1 cyp  cyp  6347 Mar 10 15:19 .viminfo</span><br><span class="line">列表依次为：</span><br><span class="line">|文件权限|连接数|所有者|用户组|文件大小|最后修改日期|文件名</span><br></pre></td></tr></table></figure></div><h4 id="权限说明"><a href="#权限说明" class="headerlink" title="权限说明"></a>权限说明</h4><p>列表的第一列：文件权限，文件权限一共10位字符。第一位字符说的是文件类型，2-9组为权限，每三组为一个用户权限，这三组分别为读，写，执行的权限展示。2-4位是文件所有者的权限，5-7位是文件所属用户组的权限，8-10位是用户组之外其他人的权限。<br>第一位字符为文件类型，文件类型主要包括：目录，文件，链接文件等，第一个字符代表文件类型如下：<br>d：目录<br>-：文件<br>l：链接文件<br>b：可用储存的接口设备<br>c：串行端口设备，比如键盘鼠标等</p><p>2-4，5-7，8-10组分别为所有者权限，用户组权限，其他人权限。每个人的权限包括读r，写w，执行x。<br>2，5，8位为r说明对文件有查看的权限，为-说明对文件没有查看权限。<br>3，6，9位为w说明对文件有编辑的权限，为-说明对文件没有编辑权限。<br>4，7，10位位为x说明对文件有执行的权限，为-说明对文件没有执行权限。</p><h4 id="文件名连接数"><a href="#文件名连接数" class="headerlink" title="文件名连接数"></a>文件名连接数</h4><p>第二列展示的位文件连接数。每一个文件都会将权限记录在i-node中。在i-node中的号码被多少文件连接，这里就会展示多少。</p><h4 id="文件所有者与所属组"><a href="#文件所有者与所属组" class="headerlink" title="文件所有者与所属组"></a>文件所有者与所属组</h4><p>第三列展示的是文件所有者，第四列展示的是文件所属的用户组。</p><h4 id="文件大小"><a href="#文件大小" class="headerlink" title="文件大小"></a>文件大小</h4><p>第五列展示的位文件大小，默认单位为B。</p><h4 id="最近修改日期"><a href="#最近修改日期" class="headerlink" title="最近修改日期"></a>最近修改日期</h4><p>第六，七，八列（也可以认为是一列）分别展示的是最近修改日期的月，日，时分/年。近期的文件第八列展示的是时，分。时间较长文件第八列展示的是年。若是创建后没有再修改过文件，这里的修改日期就是创建日期。</p><h4 id="文件名"><a href="#文件名" class="headerlink" title="文件名"></a>文件名</h4><p>最后一列就是文件的名称了，如果只有“.”组成是表示它是一个目录；如果是文件开头为“.”,说明它是一个隐藏文件。可以通过“ls -l”去感受一下什么是隐藏文件。</p><h4 id="total说明"><a href="#total说明" class="headerlink" title="total说明"></a>total说明</h4><p>发现列表最上方有一个统计值，这个值怎么来的。书上是没写的，经过查阅，发现它就是一个展示出内容的磁盘占用空间的总和值，单位为kbytes。当然不是具体的文件大小的总和。因为在系统中文件是以block储存的，一个block最大为4096bytes，。不足4098b的为一个block。超过的此大小的，对4096除数取整，有余数的+1.一个block的total为4.最后占用的block数乘以4就是total的值。<br>案例中，一共展示了10个文件（linux中一切皆文件，包括目录），其中有8个不超过4096，所以算8个block；2个文件大小超过4096的，第一个对4098相除求商取整，为1，有余数，则加一，共为2block；第二个对4098相除求商取整，有余数，加一，共为2block。所以block的值为8+2+2=12。所以total的值为：12*4=48.</p><p>学习的书籍：《鸟哥的私房菜》<br>使用的系统：腾讯云的服务器centos7.0</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;用户与用户组&quot;&gt;&lt;a href=&quot;#用户与用户组&quot; class=&quot;headerlink&quot; title=&quot;用户与用户组&quot;&gt;&lt;/a&gt;用户与用户组&lt;/h2&gt;&lt;p&gt;linux是一个多用户和多任务的系统，支持多人同时使用一台系统。因此为了考虑个人隐私及个人喜好的工作环境，“
+      
+    
+    </summary>
+    
+    
+      <category term="教程" scheme="http://yoursite.com/categories/%E6%95%99%E7%A8%8B/"/>
+    
+      <category term="linux" scheme="http://yoursite.com/categories/%E6%95%99%E7%A8%8B/linux/"/>
+    
+    
+      <category term="教程" scheme="http://yoursite.com/tags/%E6%95%99%E7%A8%8B/"/>
+    
+      <category term="linux" scheme="http://yoursite.com/tags/linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>学习linux（二）</title>
+    <link href="http://yoursite.com/2020/03/10/linux-2/"/>
+    <id>http://yoursite.com/2020/03/10/linux-2/</id>
+    <published>2020-03-10T04:12:22.000Z</published>
+    <updated>2020-03-10T06:32:29.427Z</updated>
+    
+    <content type="html"><![CDATA[<p>今天说一下linux中比较有趣的一些命令及热键。</p><h2 id="命令执行格式"><a href="#命令执行格式" class="headerlink" title="命令执行格式"></a>命令执行格式</h2><p>执行命令的格式为：</p><div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ command [-options] parameter1 parameter2 ...</span><br></pre></td></tr></table></figure></div><p>就是命令+选项+参数。</p><h2 id="基础命令"><a href="#基础命令" class="headerlink" title="基础命令"></a>基础命令</h2><p>ls：查看目录文件<br>date：显示时间<br>cal：显示日历<br>bc：基础计算器</p><h2 id="常用热键"><a href="#常用热键" class="headerlink" title="常用热键"></a>常用热键</h2><h3 id="Tab-按键"><a href="#Tab-按键" class="headerlink" title="[Tab]按键"></a>[Tab]按键</h3><p>第一次按可以补全命令（仅有一个命令的情况下），第二次按可以显示以输入的命令为开头的所有命令。我觉得最棒的热键，没有之一。</p><p>举例一：当前文件中又且仅有一个以he开头的文件，按一次[Tab]键</p><div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[cyp@VM_0_16_centos _posts]$ ls he</span><br><span class="line">[cyp@VM_0_16_centos _posts]$ ls hello-world.md</span><br></pre></td></tr></table></figure></div><p>举例二：当前文件中有两个以上linux-开头的文件，按两次[Tab]键</p><div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[cyp@VM_0_16_centos _posts]$ ls linux-</span><br><span class="line">linux-1.md  linux-2.md</span><br><span class="line">[cyp@VM_0_16_centos _posts]$ ls linux-</span><br></pre></td></tr></table></figure></div><h3 id="Ctrl-c按键"><a href="#Ctrl-c按键" class="headerlink" title="[Ctrl]+c按键"></a>[Ctrl]+c按键</h3><p>说明：[Ctrl]+c，就是同时按住[Ctrl]按键和C按键，或者按住[Ctrl]按键不松，再去按c按键，下文将不再说明。</p><p>这个是命令中止组合键，可以中断目前正在进行的程序，比如查找”/“目录<br>使用组合键后，就会中断查找的程序。</p><div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[cyp@VM_0_16_centos _posts]$ find &#x2F;</span><br><span class="line">中间省略</span><br><span class="line">^C[cyp@VM_0_16_centos _posts]$</span><br></pre></td></tr></table></figure></div><p>^C就是使用这组键留下的痕迹。</p><h3 id="Ctrl-d按键"><a href="#Ctrl-d按键" class="headerlink" title="[Ctrl]+d按键"></a>[Ctrl]+d按键</h3><p>这个组合键是退出程序的，相当于qiut或exit。我看资料大都是说相当于exit，但bc计算器的退出是quit，这个组合键也可以退出。而vi/vim状态这个就不能生效了。</p><p>本人linux还是萌新，所以这些疑问要留到以后再解决了。欢迎各位大佬们留言。</p><p>本文将持续更新…</p><p>学习的书籍：《鸟哥的私房菜》<br>用的系统：腾讯云的服务器centos7.0</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;今天说一下linux中比较有趣的一些命令及热键。&lt;/p&gt;
+&lt;h2 id=&quot;命令执行格式&quot;&gt;&lt;a href=&quot;#命令执行格式&quot; class=&quot;headerlink&quot; title=&quot;命令执行格式&quot;&gt;&lt;/a&gt;命令执行格式&lt;/h2&gt;&lt;p&gt;执行命令的格式为：&lt;/p&gt;
+&lt;div cla
+      
+    
+    </summary>
+    
+    
+      <category term="教程" scheme="http://yoursite.com/categories/%E6%95%99%E7%A8%8B/"/>
+    
+      <category term="linux" scheme="http://yoursite.com/categories/%E6%95%99%E7%A8%8B/linux/"/>
+    
+    
+      <category term="教程" scheme="http://yoursite.com/tags/%E6%95%99%E7%A8%8B/"/>
+    
+      <category term="linux" scheme="http://yoursite.com/tags/linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>学习linux（一）</title>
+    <link href="http://yoursite.com/2020/03/10/linux-1/"/>
+    <id>http://yoursite.com/2020/03/10/linux-1/</id>
+    <published>2020-03-10T02:56:22.000Z</published>
+    <updated>2020-03-10T06:08:18.789Z</updated>
+    
+    <content type="html"><![CDATA[<p>linux学习各硬件在linux中的对应文件名及说明。<br>首先是一个善意提醒，linux中根目录中，不同的文件夹作用是不一样的。所以最好不要乱存放和移删根目录中的文件或文件夹。<br>linux中硬件的设备对应的文件名主要储存在/dev的目录下。切换到此目录通过ls命令可以查看到一些设备，这些文件大都是与连接硬件相关的文件。下面我找的一些常用的文件对应的硬件设备名称：</p><p>sd[a-p]：SATA，usb硬盘，U盘。他们都是使用SCSI模块来驱动，没有固定顺序是按照内核检测到的顺序来命名的。因为usb硬盘和U盘都是开机后才被识别的，所以他们的文件一般是排在最后的。<br>lp[0-2]：25针的打印机<br>usb/lp[0-15]：usb的打印机<br>psaux：PS2的鼠标<br>usb/mouse[0-15]：usb的鼠标<br>cdrom：CD/DVD的光盘<br>mouse：当前鼠标<br>st0：SCSI的磁带机<br>vd[a-p]：虚拟机或云服务器的磁盘名称</p><p>之前很常见，但是现在基本被淘汰的设备接口：<br>hd[a-d]：IDE硬盘，最多4个接口。a-d分别是IDE1（master：hda与slave：hdb）和IDE2（master：hdc与slave：hdd），但是当前已经基本被淘汰了。<br>fd[0-1]：软驱。这个现在还有人用？<br>ht0：IDE的磁带机，IDE的接口都基本不用了。</p><p>注：1.hd[a-d]的表示为四个文件：hda,hdb,hdc,hdd。其他的写法相似。<br>2.有人会疑问为什么你展示的文件我的目录里没有呢？当然是因为你没有安装对应的硬件驱动或分区啦！<br>3.我找了很多资料没找到键盘对应的文件，ps2的键盘目前应该还是有不少的。应该跟鼠标对应，但是没找到对应的资料，以后找到了或者有大佬留言再更新。</p><p>学习的书籍：《鸟哥的私房菜》<br>使用的系统：腾讯云的服务器centos7.0</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;linux学习各硬件在linux中的对应文件名及说明。&lt;br&gt;首先是一个善意提醒，linux中根目录中，不同的文件夹作用是不一样的。所以最好不要乱存放和移删根目录中的文件或文件夹。&lt;br&gt;linux中硬件的设备对应的文件名主要储存在/dev的目录下。切换到此目录通过ls命令
+      
+    
+    </summary>
+    
+    
+      <category term="教程" scheme="http://yoursite.com/categories/%E6%95%99%E7%A8%8B/"/>
+    
+      <category term="linux" scheme="http://yoursite.com/categories/%E6%95%99%E7%A8%8B/linux/"/>
+    
+    
+      <category term="教程" scheme="http://yoursite.com/tags/%E6%95%99%E7%A8%8B/"/>
+    
+      <category term="linux" scheme="http://yoursite.com/tags/linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hello World</title>
+    <link href="http://yoursite.com/2020/01/13/hello-world/"/>
+    <id>http://yoursite.com/2020/01/13/hello-world/</id>
+    <published>2020-01-13T02:28:09.243Z</published>
+    <updated>2019-12-29T11:17:19.204Z</updated>
+    
+    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">bash</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure></div><p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">bash</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure></div><p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">bash</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure></div><p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">bash</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure></div><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+</feed>
